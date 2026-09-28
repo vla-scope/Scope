@@ -4,7 +4,7 @@
 
 **Kaiwen Zhu, Dongfang Liu, and Liangkai Liu**
 
-[Project Website](https://vla-scope.github.io/Scope/) | [Paper](https://arxiv.org/abs/2609.21246) | [PDF](https://arxiv.org/pdf/2609.21246)
+[Project Website](https://vla-scope.github.io/) | [Paper](https://arxiv.org/abs/2609.21246) | [PDF](https://arxiv.org/pdf/2609.21246)
 
 VLA-Scope combines initial input-shift characterization with execution evidence to predict failure during out-of-distribution rollouts, without changing the underlying VLA policy.
 
@@ -13,9 +13,9 @@ VLA-Scope combines initial input-shift characterization with execution evidence 
 
 ## Status
 
-This is the main project repository for VLA-Scope. Research code has not yet been released. The project website and demonstration videos are available at [vla-scope.github.io/Scope/](https://vla-scope.github.io/Scope/).
+This is the research-code repository for VLA-Scope. Research code has not yet been released. The project website and demonstration videos are available at [vla-scope.github.io](https://vla-scope.github.io/).
 
-The website source, paper PDF, and demonstration videos are in `docs/` in this repository. GitHub Pages publishes this directory from `main`. To preview locally, run `python -m http.server 8000 --bind 127.0.0.1 --directory docs`.
+The website source, paper PDF, and demonstration videos are maintained separately in [vla-scope/vla-scope.github.io](https://github.com/vla-scope/vla-scope.github.io).
 
 ## Evaluation
 
