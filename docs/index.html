@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VLA-Scope combines input-shift characterization and execution evidence to predict failures in vision-language-action models.">
+  <title>VLA-Scope | Shift-Aware Failure Prediction</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav aria-label="Main navigation"><a class="brand" href="#">VLA-Scope<span>↗</span></a><div><a href="#overview">Overview</a><a href="#method">Method</a><a href="#results">Results</a><a href="#examples">Examples</a><a href="assets/paper.pdf" target="_blank" rel="noopener">Paper ↗</a></div></nav>
+<main>
+<header class="hero">
+  <p class="eyebrow">VISION · LANGUAGE · ACTION</p>
+  <h1>VLA-Scope</h1>
+  <h2>Shift-Aware Failure Prediction for<br class="desktop"> Vision-Language-Action Models</h2>
+  <p class="authors">Kaiwen Zhu<sup>1</sup><span>Dongfang Liu<sup>2</sup></span>Liangkai Liu<sup>1</sup></p>
+  <p class="affiliations"><span><sup>1</sup> Texas Tech University</span><span><sup>2</sup> Purdue University</span></p>
+  <div class="buttons"><a class="button primary" href="assets/paper.pdf" target="_blank" rel="noopener">↗ &nbsp; Read the paper</a><a class="button" href="#overview">▷ &nbsp; Watch the overview</a></div>
+  <p class="tagline">An unfamiliar input does not always mean failure.<br><strong>Understand the shift. Watch the execution. Predict the risk.</strong></p>
+</header>
+<section id="overview" class="overview">
+  <div class="section-line"><span class="eyebrow">VLA-SCOPE IN ACTION</span><span class="small">From input shift to execution-time risk</span></div>
+  <div class="video-shell"><video controls playsinline preload="metadata" poster="assets/overview-poster.png" aria-label="VLA-Scope method walkthrough and rollout demonstrations"><source src="assets/overview.mp4" type="video/mp4">Your browser does not support video. <a href="assets/overview.mp4">Download the video.</a></video></div>
+  <p class="caption">A two-stage walkthrough, followed by selected success and failure examples across seven OOD categories.</p>
+  <div class="metrics"><div><strong>0.9454</strong><span>OOD detection ROC-AUC</span></div><div><strong>91.0<span>%</span></strong><span>OOD type accuracy</span></div><div><strong>0.8497</strong><span>Failure ROC-AUC · 60 actions</span></div></div>
+  <p class="caption">OpenVLA · 10 LIBERO-Spatial tasks · Leave-One-Group-Out evaluation. Failure ROC-AUC is measured on all 1,400 OOD rollouts, independently of the OOD gate.</p>
+</section>
+<section class="abstract narrow" id="abstract"><p class="eyebrow">THE IDEA</p><h2>Beyond detecting unfamiliar inputs</h2><p>Vision-language-action models may still succeed under distribution shifts, so detecting OOD inputs alone is insufficient to predict execution failure. VLA-Scope connects initial input-shift characterization with evidence from partial executions.</p><p>The <strong>OOD Characterizer</strong> detects unfamiliar inputs and identifies their shift categories. For inputs flagged as OOD, a shared <strong>Failure Risk Predictor</strong> combines the predicted category, action-prefix features, and temporally aggregated execution-step representations to update failure risk as execution proceeds—without changing the underlying policy.</p></section>
+<section class="motivation"><div><p class="eyebrow">WHY SHIFT CONTEXT MATTERS</p><h2>Different shifts.<br>Different failure rates.</h2><p>Every category contains both successful and failed rollouts. Shift type provides context, but it does not determine an individual outcome.</p><p class="caption">Observed failure rates in the evaluated data.<br>200 rollouts per category; not universal failure probabilities.</p></div><div class="bars" aria-label="Observed failure rates by OOD type">
+  <div><span>Camera</span><i style="--rate:77.5%"></i><b>77.5%</b></div><div><span>Robot</span><i style="--rate:67.5%"></i><b>67.5%</b></div><div><span>Noise</span><i style="--rate:52%"></i><b>52.0%</b></div><div><span>Language</span><i style="--rate:40%"></i><b>40.0%</b></div><div><span>Light</span><i style="--rate:31.5%"></i><b>31.5%</b></div><div><span>Background</span><i style="--rate:28.5%"></i><b>28.5%</b></div><div><span>Layout</span><i style="--rate:27.5%"></i><b>27.5%</b></div>
+</div></section>
+<section id="method"><p class="eyebrow">HOW IT WORKS</p><h2>Two stages. One evolving risk estimate.</h2><p class="lead">Characterize the initial input, then monitor evidence from the execution.</p>
+  <div class="stage-grid"><article><span class="number">01</span><h3>OOD Characterizer</h3><p>Pooled image and language representations support ID/OOD detection and OOD type classification.</p><span class="pill">At initialization</span></article><article><span class="number">02</span><h3>Failure Risk Predictor</h3><p>Predicted OOD type + action-prefix features + cumulative execution-step representation feed a shared logistic regression model.</p><span class="pill">During execution · from action 10</span></article></div>
+  <figure class="framework"><a href="assets/framework.png" target="_blank" rel="noopener" aria-label="Open full-size framework figure"><img src="assets/framework.png" loading="lazy" alt="VLA-Scope architecture: initial image and text representations feed OOD detection and type classification. Predicted type, 14 action features and 32 representation features are combined into a shared logistic risk predictor."></a><figcaption>Framework overview from the paper. The risk curve is schematic. Click to enlarge.</figcaption></figure>
+  <p class="note">An ID decision returns no failure-risk score; it is not a prediction of task success. The predicted shift category is fixed within each rollout.</p>
+</section>
+<section id="results"><p class="eyebrow">KEY RESULTS</p><h2>More execution evidence, better separation.</h2><p class="lead">At 10, 30, and 60 actions, evaluation retains the same 1,400 OOD rollouts.</p>
+  <div class="results-grid"><article class="result-card"><h3>Failure prediction over time</h3><div class="checkpoint"><div><strong>0.6852</strong><span>10 actions</span></div><span>→</span><div><strong>0.7675</strong><span>30 actions</span></div><span>→</span><div><strong>0.8497</strong><span>60 actions</span></div></div><p>ROC-AUC improves as evidence accumulates. Later checkpoints have changing cohorts as completed rollouts leave evaluation.</p></article><article class="result-card"><h3>Complementary signals</h3><div class="ablation"><p><span>Without cumulative representation</span><b>0.7906</b></p><p><span>Without action features</span><b>0.8344</b></p><p class="ours"><span>VLA-Scope</span><b>0.8497</b></p></div><p>Step-60 ROC-AUC. Both reduced variants retain predicted OOD type.</p></article></div>
+  <h3 class="table-title">Comparison at 60 executed actions</h3><div class="table-wrap"><table><thead><tr><th>Method</th><th>ROC-AUC ↑</th><th>CPU scoring latency ↓</th></tr></thead><tbody><tr><td>ActProbe</td><td>0.8132</td><td>1.068 ms</td></tr><tr><td>SAFE-MLP</td><td>0.8055</td><td>3.249 ms</td></tr><tr><td>SAFE-LSTM</td><td>0.7414</td><td>6.773 ms</td></tr><tr class="ours"><td>VLA-Scope</td><td>0.8497</td><td>0.893 ms</td></tr></tbody></table></div><p class="caption">Source: Table IV. Neural baseline ROC-AUC is averaged over three seeds. Latencies use cached inputs and exclude policy feature acquisition, simulation, file access, and model loading; they are not end-to-end inference times.</p>
+</section>
+<section id="examples"><p class="eyebrow">WATCH THE EXECUTION</p><h2>Seven shifts, paired outcomes.</h2><p class="lead">Successful and failed executions, side by side with their evolving failure-risk scores.</p><div class="video-shell"><video controls playsinline preload="metadata" poster="assets/rollouts-poster.png" aria-label="Seven OOD categories with paired success and failure rollout videos"><source src="assets/rollouts.mp4" type="video/mp4"></video></div><p class="caption">Selected illustrative cases, not an unbiased sample of model performance. Success/Failure labels denote final outcomes; frame borders denote the current prediction: green below 50%, red at or above 50%, gray before scoring. Playback: 20 actions/s.</p><a class="text-link" href="assets/rollouts.mp4" download>Download the rollout video ↓</a></section>
+<section class="paper-end"><p class="eyebrow">READ MORE</p><h2>VLA-Scope</h2><p>Experimental protocol, ablations, error analysis, and implementation details.</p><a class="button primary" href="assets/paper.pdf" target="_blank" rel="noopener">Read the full paper ↗</a></section>
+</main>
+<footer><span>VLA-Scope · Kaiwen Zhu, Dongfang Liu &amp; Liangkai Liu</span><span><a href="https://github.com/vla-scope/Scope" target="_blank" rel="noopener">GitHub</a> · <a href="https://vla-safe.github.io/" target="_blank" rel="noopener">Layout reference: SAFE</a></span></footer>
+</body>
+</html>
